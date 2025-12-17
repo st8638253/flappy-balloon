@@ -1,0 +1,628 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.game-topbar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 50;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    color: white;
+    font-size: 14px;
+}
+
+.game-user {
+    font-weight: 500;
+}
+
+.game-username {
+    color: gold;
+    font-weight: 700;
+}
+
+.game-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.game-delete-btn {
+    background-color: #d63031;
+}
+
+.game-delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.background {
+    height: 100vh;
+    width: 100vw;
+    background:
+        linear-gradient(
+            rgba(0, 0, 0, 0.55),
+            rgba(0, 0, 0, 0.55)
+        ),
+        url('/images/background-img.png') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.balloon {
+	height: 100px;
+	width: 130px;
+	position: fixed;
+	top: 40vh;
+	left: 30vw;
+	z-index: 100;
+}
+.best-score {
+    position: fixed;
+    z-index: 10;
+    bottom: 10px;  
+    right: 10px;
+    font-size: 5vh;
+    font-weight: bold;
+    color: white;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.best-score:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.05);
+}
+
+.best_score_val {
+    color: gold;
+}
+
+.heading {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 6em;
+    color: #f5f5f5;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    text-align: center;
+}
+
+
+.pipe_sprite {
+    position: fixed;
+    top: 40vh;
+    left: 100vw;
+    height: 70vh;
+    width: 6vw;
+    border: 4px solid #bfa76a;
+    border-radius: 8px;
+
+    background: 
+        repeating-linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.1) 0px,
+            rgba(0, 0, 0, 0.1) 2px,
+            rgba(255, 255, 255, 0.2) 2px,
+            rgba(255, 255, 255, 0.2) 6px
+        ),
+        linear-gradient(to bottom, #e8dab2, #d8c48c);
+    background-blend-mode: multiply;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.15), 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.pipe_sprite::before,
+.pipe_sprite::after {
+    content: "";
+    position: absolute;
+    left: -8px;
+    width: calc(100% + 16px);
+    height: 20px;
+    background: linear-gradient(to bottom, #cbb57a, #bfa76a);
+    border-radius: 6px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
+
+.pipe_sprite::before { top: -20px; }
+.pipe_sprite::after { bottom: -20px; }
+.message {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+
+    text-align: center;
+}
+
+.message-hint {
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #f5f5f5;
+    font-size: 1.4rem;
+    max-width: 480px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.message-btn {
+    padding: 14px 32px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+
+    background: radial-gradient(circle at 0% 0%, #7cffc4, #26a69a);
+    color: #0b0b0b;
+
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.12),
+        0 10px 25px rgba(0, 0, 0, 0.7);
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition:
+        transform 0.18s ease-out,
+        box-shadow 0.18s ease-out,
+        filter 0.18s ease-out;
+}
+
+.message-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    filter: brightness(1.05);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.18),
+        0 14px 30px rgba(0, 0, 0, 0.8);
+}
+
+.message-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.12),
+        0 6px 16px rgba(0, 0, 0, 0.7);
+}
+
+.score {
+    position: fixed;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 16px;
+    height: auto;
+    font-size: 5vh;
+    font-weight: 600;
+
+    color: #f5f5f5;
+    -webkit-text-stroke-width: 0; 
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+}
+
+.score_val {
+    color: #ffd700;   
+    font-weight: 800;
+    }
+
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 28px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px; 
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.button:active {
+    background-color: #3e8e41;
+    transform: scale(1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 20;
+    left: 50%;
+    top: 50%;
+    width: 400px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    text-align: center;
+    color: white;
+}
+
+.modal-content {
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 1.5rem;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    color: #ff4c4c;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+.replay-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.3rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background 0.3s;
+}
+
+.replay-btn:hover {
+    background-color: #45a049;
+}
+
+@media only screen and (max-width: 1080px) {
+    .message {
+        font-size: 4vh;
+        top: 50%;
+        white-space: nowrap;
+    }
+    .score {
+        font-size: 8vh;
+    }
+    .balloon {
+        width: 12vw;
+        height: auto;
+    }
+    .pipe_sprite {
+        width: 14vw;
+    }
+    .button {
+        padding: 1.2vh 2.4vh;
+        font-size: 1.4vh;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .message {
+        font-size: 3.5vh;
+    }
+    .score {
+        font-size: 7vh;
+    }
+    .balloon {
+        width: 13vw;
+        height: auto;
+    }
+    .pipe_sprite {
+        width: 16vw;
+    }
+    .button {
+        padding: 1vh 2vh;
+        font-size: 1.2vh;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .message {
+        font-size: 3vh;
+    }
+    .score {
+        font-size: 6vh;
+    }
+    .balloon {
+        width: 15vw;
+        height: auto;
+    }
+    .pipe_sprite {
+        width: 18vw;
+    }
+    .button {
+        padding: 0.8vh 1.6vh;
+        font-size: 1vh;
+    }
+}
+
+
+.auth-page {
+    min-height: 100vh;
+    width: 100vw;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.65),
+        rgba(0, 0, 0, 0.65)
+    ),
+    url("/images/background-img.png") no-repeat center center fixed;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 380px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    animation: authFade 0.4s ease;
+}
+
+@keyframes authFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-card h2 {
+    margin-bottom: 20px;
+    font-size: 2.6rem;
+    color: white;
+    -webkit-text-stroke: 2px black;
+}
+
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.auth-card input {
+    height: 48px;
+    font-size: 1.1rem;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    outline: none;
+    background: #f3f3f3;
+    transition: 0.2s;
+}
+
+.auth-card input:focus {
+    border-color: #4caf50;
+    background: #ffffff;
+}
+
+.auth-card button[type="submit"] {
+    margin-top: 10px;
+    height: 48px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.auth-card button[type="submit"]:hover {
+    transform: scale(1.04);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+.auth-card button[type="submit"]:active {
+    transform: scale(1);
+}
+
+.link-btn {
+    margin-top: 14px;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    color: gold;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.link-btn:hover {
+    color: #ffd700;
+    transform: scale(1.05);
+}
+
+.error {
+    background: rgba(255, 60, 60, 0.15);
+    border: 1px solid rgba(255, 60, 60, 0.6);
+    color: #ff4c4c;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+
+@media (max-width: 480px) {
+    .auth-card {
+        width: 90vw;
+        padding: 26px 20px;
+    }
+
+    .auth-card h2 {
+        font-size: 2.2rem;
+    }
+
+    .auth-card input {
+        font-size: 1rem;
+        height: 44px;
+    }
+
+    .auth-card button[type="submit"] {
+        font-size: 1.1rem;
+        height: 44px;
+    }
+}
+
+.leaderboard-page {
+    min-height: 100vh;
+    width: 100vw;
+    background: linear-gradient(
+        rgba(0, 0, 0, 0.65),
+        rgba(0, 0, 0, 0.65)
+    ),
+    url("/images/background-img.png") no-repeat center center fixed;
+    background-size: cover;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 80px;
+    gap: 25px;
+}
+
+.leaderboard-page h2 {
+    font-size: 3rem;
+    color: white;
+    -webkit-text-stroke: 2px black;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.leaderboard-table {
+    width: 600px;
+    max-width: 95vw;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    animation: leaderboardFade 0.4s ease;
+}
+
+@keyframes leaderboardFade {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 14px 16px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.leaderboard-table thead {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+}
+
+.leaderboard-table th {
+    color: white;
+    font-weight: bold;
+    border-bottom: 2px solid black;
+}
+
+.leaderboard-table tbody tr {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.leaderboard-table tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-table tbody tr:hover {
+    background: rgba(255, 215, 0, 0.25);
+    transform: scale(1.01);
+}
+
+.leaderboard-table td:first-child {
+    font-weight: bold;
+    color: gold;
+}
+
+.leaderboard-table td:last-child {
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.leaderboard-page .error {
+    background: rgba(255, 60, 60, 0.15);
+    border: 1px solid rgba(255, 60, 60, 0.7);
+    color: #ff4c4c;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+
+@media (max-width: 768px) {
+    .leaderboard-page h2 {
+        font-size: 2.4rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        font-size: 1.05rem;
+        padding: 12px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .leaderboard-page {
+        padding-top: 60px;
+    }
+
+    .leaderboard-page h2 {
+        font-size: 2rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        font-size: 0.95rem;
+        padding: 10px 8px;
+    }
+}
+
